@@ -5,7 +5,7 @@ import Foundation
 extension View {
     func setupObservableClassProperties(node: Node) {
         for (_, value) in Mirror(reflecting: self).children {
-            if let observable = value as? Observation.Observable {
+            if let _ = value as? Observation.Observable {
                 startObservation(node: node)
             }
         }
@@ -13,7 +13,7 @@ extension View {
     
     func startObservation(node: Node) {
         log("Starting observation")
-        withObservationTracking {
+        let _ = withObservationTracking {
             self.body
         } onChange: {
             defer {

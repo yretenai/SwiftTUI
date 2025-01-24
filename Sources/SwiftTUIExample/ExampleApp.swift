@@ -1,12 +1,16 @@
-
 import SwiftTUI
 
 @main struct ExampleApp {
     static func main() {
         if #available(macOS 14.0, *) {
+            #if os(macOS)
+                let loopType: Application.RunLoopType = .cocoa
+            #else
+                let loopType: Application.RunLoopType = .dispatch
+            #endif
             Application(
                 rootView: ExampleView(),
-                runLoopType: .cocoa
+                runLoopType: loopType
             )
             .start()
         } else {
@@ -21,7 +25,9 @@ struct ExampleView: View {
     var body: some View {
         HStack {
             ObservationView().border()
-            CombineView().border()
+            #if os(macOS)
+                CombineView().border()
+            #endif
         }
     }
 }
@@ -73,7 +79,7 @@ struct ObservationView: View {
 }
 
 
-
+#if os(macOS)
 // MARK: Combine Example
 struct CombineView: View {
     @ObservedObject var vm: CombineViewModel = CombineViewModel()
@@ -113,3 +119,4 @@ class CombineViewModel: ObservableObject {
         self.showCounter = showCounter
     }
 }
+#endif
